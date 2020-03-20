@@ -1,6 +1,6 @@
 {
   "name": "detection-worm-js",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "主要针对使用XPath语法对网站解析，以及常用工具集",
   "main": "lib/driller.common.js",
   "entry": "index.js",
@@ -18,7 +18,23 @@
     "babel",
     "nodejs"
   ],
-  "author": "zhichao.ren",
+  "files": [
+    "lib/driller.common.js",
+    "LICENSE",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ren-Zhi-Chao/detection-worm-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Ren-Zhi-Chao/detection-worm-js/issues"
+  },
+  "homepage": "https://github.com/Ren-Zhi-Chao/detection-worm-js#readme",
+  "author": {
+    "name": "zhichao.ren",
+    "email": "973063956@qq.com"
+  },
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.8.7",
