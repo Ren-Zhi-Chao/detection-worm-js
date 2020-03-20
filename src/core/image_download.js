@@ -7,6 +7,8 @@ class ImageDownload {
 
     constructor(url, filename, path = process.cwd()) {
         this.url = url;
+        const extname =  _path.extname(url) ? _path.extname(url) : '.png';
+        filename = _path.extname(filename) ? filename : filename + extname;
         this.file = _path.join(path, filename);
         this.writeStream = fs.createWriteStream(this.file);
     }
@@ -29,7 +31,6 @@ class ImageDownload {
         const http = request(this.options);
         http.pipe(this.writeStream);
         http.on('end', function() {
-            this.writeStream.end();
             if ($.isFunction(callback.success)) {
                 callback.success();
             } else {
@@ -37,7 +38,6 @@ class ImageDownload {
             }
         });
         http.on('error', function(err) {
-            this.writeStream.end();
             if ($.isFunction(callback.error)) {
                 callback.error();
             } else {
