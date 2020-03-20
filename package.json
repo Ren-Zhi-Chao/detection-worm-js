@@ -1,0 +1,41 @@
+{
+  "name": "detection-worm-js",
+  "version": "1.0.0",
+  "description": "主要针对使用XPath语法对网站解析，以及常用工具集",
+  "main": "lib/driller.common.js",
+  "entry": "index.js",
+  "scripts": {
+    "test": "babel-node test.js",
+    "bt": "npm run build && npm run test",
+    "fuck": "babel-node ./src/core/XPath.js",
+    "build:index": "babel-node ./builder/entry.build.js",
+    "build:babel": "babel --plugins @babel/plugin-transform-arrow-functions index.js",
+    "build:webpack": "webpack --mode production --hide-modules --config builder/webpack.config.js --progress --colors",
+    "build": "npm run build:index && npm run build:webpack"
+  },
+  "keywords": [
+    "webpack",
+    "babel",
+    "nodejs"
+  ],
+  "author": "zhichao.ren",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "@babel/node": "^7.8.7",
+    "@babel/plugin-transform-arrow-functions": "^7.8.3",
+    "@babel/plugin-transform-classes": "^7.8.6",
+    "@babel/preset-env": "^7.8.7",
+    "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
+    "handlebars": "^4.7.3",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11"
+  },
+  "dependencies": {
+    "progress": "^2.0.3",
+    "request": "^2.88.2",
+    "xmldom": "^0.3.0",
+    "xpath": "^0.0.27"
+  }
+}
