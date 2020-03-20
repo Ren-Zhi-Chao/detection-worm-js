@@ -1,6 +1,6 @@
 {
   "name": "detection-worm-js",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "主要针对使用XPath语法对网站解析，以及常用工具集",
   "main": "lib/driller.common.js",
   "entry": "index.js",
@@ -14,9 +14,7 @@
     "build": "npm run build:index && npm run build:webpack"
   },
   "keywords": [
-    "webpack",
-    "babel",
-    "nodejs"
+    "xpath", "web analysis", "nodejs", "es6"
   ],
   "files": [
     "lib/driller.common.js",
