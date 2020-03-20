@@ -7,7 +7,7 @@
   "scripts": {
     "test": "babel-node test.js",
     "bt": "npm run build && npm run test",
-    "fuck": "babel-node ./src/core/XPath.js",
+    "fuck": "babel-node ./src/core/image_download.js",
     "build:index": "babel-node ./builder/entry.build.js",
     "build:babel": "babel --plugins @babel/plugin-transform-arrow-functions index.js",
     "build:webpack": "webpack --mode production --hide-modules --config builder/webpack.config.js --progress --colors",
