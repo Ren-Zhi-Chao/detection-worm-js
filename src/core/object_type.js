@@ -73,7 +73,7 @@ function findIndex(array, value) {
 }
 
 function mapReplace(map, replace) {
-  if (isObject(map) && isObject(require)) {
+  if (isObject(map) && isObject(replace)) {
     const mapKeys = Object.keys(map);
     const replKeys = Object.keys(replace);
     replKeys

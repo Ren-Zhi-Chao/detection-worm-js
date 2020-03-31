@@ -1,8 +1,7 @@
-const request = require('request');
+import request from 'request';
 import MyError from '../utils/error.util';
 import { ErrorType } from '../utils/error.util';
-import TimeUtil from '../utils/time.util';
-import deasync from 'deasync';
+import Deasync from 'deasync';
 
 /**
  * Runner 默认参数
@@ -58,7 +57,7 @@ async function Runner(url, options = { }) {
             break;
         }
         console.log(`第 ${i} 次连接失败...${i < options.retry ? `${options.waiting}s后尝试下一次连接`: '终止连接'}......`);
-        await TimeUtil.sleep(options.waiting * 1000);
+        Deasync.sleep(options.waiting * 1000);
     }
     return webXml;
 }
@@ -81,7 +80,7 @@ function RunnerSync(url, options = { }) {
             break;
         }
         if (options.log) console.log(`第 ${i} 次连接失败...${i < options.retry ? `${options.waiting}s后尝试第 ${ i + 1 } 次连接`: '终止连接'}......`);
-        // await TimeUtil.sleep(options.waiting * 1000);
+        Deasync.sleep(options.waiting * 1000);
     }
     return webXml;
 }
@@ -103,7 +102,7 @@ function loadPageSync(url, timeout = RunnerOptions.timeout) {
         end = true;
     })
     while(!end) {
-        deasync.sleep(100);
+        Deasync.sleep(100);
     }
     return result;
 }

@@ -1,5 +1,6 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const nodeExternals = require('webpack-node-externals')
 const domain = require('../package.json');
 const entry = domain.entry.startsWith('./') ? domain.entry : `./${domain.entry}`;
 const output_file = path.basename(domain.main);
@@ -25,5 +26,8 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin()
+  ],
+  externals: [
+    nodeExternals()
   ]
 }

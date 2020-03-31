@@ -2,7 +2,7 @@ import Handlebars from 'handlebars';
 import _path from 'path';
 import fs from 'fs';
 import FileUtils from '../src/utils/file.util';
-import StringUtils from '../src/utils/string.util'
+import StringUtils from '../src/core/string_util'
 const domain = require('../package.json');
 const index = _path.resolve(__dirname, '../', domain.entry);
 
