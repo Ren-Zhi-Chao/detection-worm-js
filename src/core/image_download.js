@@ -2,6 +2,7 @@ import request from 'request';
 import fs from 'fs';
 import _path from 'path';
 import $ from './object_type';
+import Deasync from 'deasync';
 
 class ImageDownload {
 
@@ -52,6 +53,40 @@ class ImageDownload {
                 console.log("文件写入成功");
             }
         });
+    }
+
+    downloadSync(callback = { end: null, error: null, success: null }) {
+        let end = false;
+        const http = request(this.options);
+        http.pipe(this.writeStream);
+        http.on('end', function() {
+            if ($.isFunction(callback.success)) {
+                callback.success();
+            } else {
+                console.log('文件下载成功~')
+            }
+            end = true;
+        });
+        http.on('error', function(err) {
+            if ($.isFunction(callback.error)) {
+                callback.error();
+            } else {
+                console.log("错误信息:" + err)
+            }
+            end = true;
+        })
+        http.on("finish", function() {
+            this.writeStream.end();
+            if ($.isFunction(callback.end)) {
+                callback.end();
+            } else {
+                console.log("文件写入成功");
+            }
+            end = true;
+        });
+        while(!end) {
+            Deasync.sleep(100)
+        }
     }
 }
 
