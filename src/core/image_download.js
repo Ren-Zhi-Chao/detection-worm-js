@@ -22,7 +22,10 @@ const WRITE = `
 
 class ImageDownload {
 
-    constructor(url, filename, path = process.cwd()) {
+    // logger: ERROR 打印异常，ALL 打印所有，WRITE 写入log文件（地址同`path`）
+    constructor({ url, filename, path, logger }) {
+        path = path ? path : process.cwd();
+        this.logger = logger ? logger : 'ALL';
         this.url = url;
         const extname =  _path.extname(url) ? _path.extname(url) : '.png';
         filename = filename ? (_path.extname(filename) ? filename : filename + extname) : url.substring(url.lastIndexOf('/') + 1);
@@ -57,14 +60,14 @@ class ImageDownload {
             if ($.isFunction(callback.success)) {
                 callback.success();
             } else {
-                console.log(SUCCESS.replace(/URL/g, that.url).replace(/FILENAME/g, that.file));
+                if (that.logger === 'ALL') console.log(SUCCESS.replace(/URL/g, that.url).replace(/FILENAME/g, that.file));
             }
         });
         http.on('error', function(err) {
             if ($.isFunction(callback.error)) {
                 callback.error();
             } else {
-                console.error(ERROR.replace(/URL/g, that.url).replace(/FILENAME/g, that.file).replace(/TYPE/g, err.code));
+                if (that.logger === 'ALL' || logger === 'ERROR') console.error(ERROR.replace(/URL/g, that.url).replace(/FILENAME/g, that.file).replace(/TYPE/g, err.code));
             }
         })
         http.on("finish", function() {
@@ -72,7 +75,7 @@ class ImageDownload {
             if ($.isFunction(callback.end)) {
                 callback.end();
             } else {
-                console.log(WRITE.replace(/URL/g, that.url).replace(/FILENAME/g, that.file));
+                if (that.logger === 'ALL') console.log(WRITE.replace(/URL/g, that.url).replace(/FILENAME/g, that.file));
             }
         });
     }
@@ -87,7 +90,7 @@ class ImageDownload {
             if ($.isFunction(callback.success)) {
                 callback.success();
             } else {
-                console.log(SUCCESS.replace(/URL/g, that.url).replace(/FILENAME/g, that.file));
+                if (that.logger === 'ALL') console.log(SUCCESS.replace(/URL/g, that.url).replace(/FILENAME/g, that.file));
             }
             end = true;
         });
@@ -95,7 +98,7 @@ class ImageDownload {
             if ($.isFunction(callback.error)) {
                 callback.error();
             } else {
-                console.error(ERROR.replace(/URL/g, that.url).replace(/FILENAME/g, that.file).replace(/TYPE/g, err.code));
+                if (that.logger === 'ALL' || logger === 'ERROR') console.error(ERROR.replace(/URL/g, that.url).replace(/FILENAME/g, that.file).replace(/TYPE/g, err.code));
             }
             end = true;
         })
@@ -104,7 +107,7 @@ class ImageDownload {
             if ($.isFunction(callback.end)) {
                 callback.end();
             } else {
-                console.log(WRITE.replace(/URL/g, that.url).replace(/FILENAME/g, that.file));
+                if (that.logger === 'ALL') console.log(WRITE.replace(/URL/g, that.url).replace(/FILENAME/g, that.file));
             }
             end = true;
         });
