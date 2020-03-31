@@ -4,14 +4,34 @@ import _path from 'path';
 import $ from './object_type';
 import Deasync from 'deasync';
 
+const SUCCESS = `
+    状态：文件下载成功~
+    地址：URL
+    文件名：FILENAME
+`;
+const ERROR = `
+    下载异常：TYPE
+    地址：URL
+    文件名：FILENAME
+`;
+const WRITE = `
+    状态：文件写入成功
+    地址：URL
+    文件名：FILENAME
+`;
+
 class ImageDownload {
 
     constructor(url, filename, path = process.cwd()) {
         this.url = url;
         const extname =  _path.extname(url) ? _path.extname(url) : '.png';
-        filename = _path.extname(filename) ? filename : filename + extname;
+        filename = filename ? (_path.extname(filename) ? filename : filename + extname) : url.substring(url.lastIndexOf('/') + 1);
         this.file = _path.join(path, filename);
         this.writeStream = fs.createWriteStream(this.file);
+    }
+
+    vailOptions() {
+        if (!this.options) this.setOptions().init();
     }
 
     setOptions(options = { method: 'get', headers: { referer: this.url } }) {
@@ -29,20 +49,22 @@ class ImageDownload {
     }
 
     download(callback = { end: null, error: null, success: null }) {
+        this.vailOptions();
         const http = request(this.options);
         http.pipe(this.writeStream);
+        const that = this;
         http.on('end', function() {
             if ($.isFunction(callback.success)) {
                 callback.success();
             } else {
-                console.log('文件下载成功~')
+                console.log(SUCCESS.replace(/URL/g, that.url).replace(/FILENAME/g, that.file));
             }
         });
         http.on('error', function(err) {
             if ($.isFunction(callback.error)) {
                 callback.error();
             } else {
-                console.log("错误信息:" + err)
+                console.error(ERROR.replace(/URL/g, that.url).replace(/FILENAME/g, that.file).replace(/TYPE/g, err.code));
             }
         })
         http.on("finish", function() {
@@ -50,20 +72,22 @@ class ImageDownload {
             if ($.isFunction(callback.end)) {
                 callback.end();
             } else {
-                console.log("文件写入成功");
+                console.log(WRITE.replace(/URL/g, that.url).replace(/FILENAME/g, that.file));
             }
         });
     }
 
     downloadSync(callback = { end: null, error: null, success: null }) {
+        this.vailOptions();
         let end = false;
         const http = request(this.options);
+        const that = this;
         http.pipe(this.writeStream);
         http.on('end', function() {
             if ($.isFunction(callback.success)) {
                 callback.success();
             } else {
-                console.log('文件下载成功~')
+                console.log(SUCCESS.replace(/URL/g, that.url).replace(/FILENAME/g, that.file));
             }
             end = true;
         });
@@ -71,7 +95,7 @@ class ImageDownload {
             if ($.isFunction(callback.error)) {
                 callback.error();
             } else {
-                console.log("错误信息:" + err)
+                console.error(ERROR.replace(/URL/g, that.url).replace(/FILENAME/g, that.file).replace(/TYPE/g, err.code));
             }
             end = true;
         })
@@ -80,7 +104,7 @@ class ImageDownload {
             if ($.isFunction(callback.end)) {
                 callback.end();
             } else {
-                console.log("文件写入成功");
+                console.log(WRITE.replace(/URL/g, that.url).replace(/FILENAME/g, that.file));
             }
             end = true;
         });
@@ -91,3 +115,5 @@ class ImageDownload {
 }
 
 export default ImageDownload;
+
+// new Class('必填', '可选', '可选').setOptions().init();
