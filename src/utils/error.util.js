@@ -20,4 +20,7 @@ class Error {
     }
 }
 
-module.exports = Error;
+export default Error;
+export {
+    ErrorType
+}
