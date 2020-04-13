@@ -9,14 +9,15 @@ const ErrorType = {
 
 class Error {
 
-    constructor(options = { }) {
+    constructor(close = true, options = { }) {
+        this._close = close;
         Object.keys(options).forEach(key => ErrorType[key] = options[key]);
     }
 
     error({ code } = { code: 'NIL' }) {
         const value = ErrorType[code.toUpperCase()];
         console.error(`Error: { code: ${value.code}, message: ${value.msg} }`);
-        process.exit(value.code);
+        if (this._close) process.exit(value.code);
     }
 }
 

@@ -1,4 +1,5 @@
 import $ from '../core/object_type';
+import _path from 'path';
 
 const Type = {
     text: 'text()',
@@ -8,7 +9,7 @@ const Type = {
 }
 
 function StringHandle(express, param) {
-    return [ { express: `${express}${express ? '/' : ''}${Type[param] ? Type[param] : param}`, alias: param } ];
+    return [ { express: `${express}${express ? '/' : ''}${Type[param] ? Type[param] : param}`, alias: _path.basename(param) } ];
 }
 
 function MapHandle(express, param) {
@@ -33,9 +34,14 @@ function ArrayHandle(express, param) {
 }
 
 const Param = (express, param) => {
-    if ($.isString(param)) return StringHandle(express, param);
-    if ($.isMap(param)) return MapHandle(express, param);
-    if ($.isArray(param)) return ArrayHandle(express, param);
+    const bool = ValidateAttrArray(param);
+    if (!bool) {
+        if ($.isString(param)) return StringHandle(express, param);
+        if ($.isMap(param)) return MapHandle(express, param);
+        if ($.isArray(param)) return ArrayHandle(express, param);
+    } else {
+        return [  ];
+    }
     return [ ];
 }
 
@@ -63,6 +69,24 @@ const ResultNoKey = (array = [ ]) => {
    return $.mergeArray(...array)
 }
 
+// 验证是否包含子项
+const ValidateAttrArray = (param) => {
+    const array = [ ];
+    if ($.isMap(param)) {
+        array.push(param);
+    } else if ($.isArray(param)) {
+        array.push(...param)
+    } else {
+        return false;
+    }
+    for (let row of array) {
+        if ($.isMap(row) && $.isArray(row.attr)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 export default {
-    Param, Result, ResultNoKey
+    Param, Result, ResultNoKey, ValidateAttrArray
 }
