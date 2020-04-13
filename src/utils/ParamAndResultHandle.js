@@ -7,32 +7,35 @@ const Type = {
     href: '@href'
 }
 
-function StringHandle(expression, param) {
-    return [ { express: `${expression}/${Type[param] ? Type[param] : param}`, alias: param } ];
+function StringHandle(express, param) {
+    return [ { express: `${express}${express ? '/' : ''}${Type[param] ? Type[param] : param}`, alias: param } ];
 }
 
-function MapHandle(expression, param) {
+function MapHandle(express, param) {
     const alias = param.alias;
     const attr = param.attr ? param.attr : param.alias;
-    return [ { express: `${expression}/${Type[attr] ? Type[attr] : attr}`, alias, handle: param.handle } ];
+    if ($.isArray(attr)) {
+        return [ { alias, handle: param.handle, express: ArrayHandle(express, attr) } ];
+    }
+    return [ { express: `${express}${express ? '/' : ''}${Type[attr] ? Type[attr] : attr}`, alias, handle: param.handle } ];
 }
 
-function ArrayHandle(expression, param) {
+function ArrayHandle(express, param) {
     const result = [ ];
     param.forEach(row => {
         if ($.isString(row)) {
-            result.push(...StringHandle(expression, row));
+            result.push(...StringHandle(express, row));
         } else if ($.isMap(row)) {
-            result.push(...MapHandle(expression, row))
+            result.push(...MapHandle(express, row))
         }
     })
     return result;
 }
 
-const Param = (expression, param) => {
-    if ($.isString(param)) return StringHandle(expression, param);
-    if ($.isMap(param)) return MapHandle(expression, param);
-    if ($.isArray) return ArrayHandle(expression, param);
+const Param = (express, param) => {
+    if ($.isString(param)) return StringHandle(express, param);
+    if ($.isMap(param)) return MapHandle(express, param);
+    if ($.isArray(param)) return ArrayHandle(express, param);
     return [ ];
 }
 

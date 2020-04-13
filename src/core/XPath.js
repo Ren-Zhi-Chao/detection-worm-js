@@ -24,19 +24,24 @@ class XPath {
             const param = PAR.Param(expression, options);
             const result = [ ];
             param.forEach(config => {
-                const all = xpath.select(config.express, this._dom);
-                const rowArray = [ ];
-                all.forEach(({ nodeValue }) => { 
-                    const domResult = config.handle? config.handle(nodeValue) : nodeValue;
-                    if (!noKey) {
-                        const rowMap = { };
-                        rowMap[config.alias] = `${domResult}`;
-                        rowArray.push(rowMap);
-                    } else {
-                        rowArray.push(`${domResult}`);
-                    }
-                })
-                result.push(rowArray);
+                if ($.isArray(config.express)) {
+                    config.express = config.express[0];
+                }
+                if ($.isString(config.express)) {
+                    const all = xpath.select(config.express, this._dom);
+                    const rowArray = [ ];
+                    all.forEach(({ nodeValue }) => { 
+                        const domResult = config.handle? config.handle(nodeValue) : nodeValue;
+                        if (!noKey) {
+                            const rowMap = { };
+                            rowMap[config.alias] = `${domResult}`;
+                            rowArray.push(rowMap);
+                        } else {
+                            rowArray.push(`${domResult}`);
+                        }
+                    })
+                    result.push(rowArray);
+                }
             })
             if (noKey) {
                 return [...PAR.ResultNoKey(result)];
@@ -49,9 +54,9 @@ class XPath {
         }
     }
 
-    selector1(expression, options) {
+    selector1(expression, options, noKey = false) {
         try {
-            const result = this.selector(expression, options);
+            const result = this.selector(expression, options, noKey);
             return result.length > 0 ? result[0] : { };
         } catch (err) {
             if (!this._close) new MyError().error({ code: 'XPATH_PARSE' });
