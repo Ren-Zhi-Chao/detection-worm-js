@@ -1,6 +1,6 @@
 {
   "name": "detection-worm-js",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "主要针对使用XPath语法对网站解析，以及常用工具集",
   "main": "lib/driller.common.js",
   "entry": "index.js",
