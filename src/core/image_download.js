@@ -27,8 +27,8 @@ class ImageDownload {
         path = path ? path : process.cwd();
         this.logger = logger ? logger : 'ALL';
         this.url = url;
-        const extname =  _path.extname(url) ? _path.extname(url) : '.png';
-        filename = filename ? (_path.extname(filename) ? filename : filename + extname) : url.substring(url.lastIndexOf('/') + 1);
+        const extname = _path.extname(url) ? _path.extname(url) : '.png';
+        filename = filename ? (_path.extname(filename) ? filename : filename + extname) : Date.now() + extname;
         this.file = _path.join(path, filename);
         this.writeStream = fs.createWriteStream(this.file);
     }
