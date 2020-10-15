@@ -23,14 +23,13 @@ const WRITE = `
 class ImageDownload {
 
     // logger: ERROR 打印异常，ALL 打印所有，WRITE 写入log文件（地址同`path`）
-    constructor({ url, filename, path, logger }) {
+    constructor({ url, filename, path, logger } = { }) {
         path = path ? path : process.cwd();
         this.logger = logger ? logger : 'ALL';
         this.url = url;
         const extname = _path.extname(url) ? _path.extname(url) : '.png';
         filename = filename ? (_path.extname(filename) ? filename : filename + extname) : Date.now() + extname;
         this.file = _path.join(path, filename);
-        this.writeStream = fs.createWriteStream(this.file);
     }
 
     vailOptions() {
@@ -53,6 +52,7 @@ class ImageDownload {
 
     download(callback = { end: null, error: null, success: null }) {
         this.vailOptions();
+        this.writeStream = fs.createWriteStream(this.file);
         const http = request(this.options);
         http.pipe(this.writeStream);
         const that = this;
@@ -82,6 +82,7 @@ class ImageDownload {
 
     downloadSync(callback = { end: null, error: null, success: null }) {
         this.vailOptions();
+        this.writeStream = fs.createWriteStream(this.file);
         let end = false;
         const http = request(this.options);
         const that = this;
@@ -119,4 +120,5 @@ class ImageDownload {
 
 export default ImageDownload;
 
-// new Class('必填', '可选', '可选').setOptions().init();
+// new ImageDownload({ url }).init().downloadSync();
+// 如果有headers设定：new ImageDownload({ url }).setOptions({  }).init().downloadSync();
