@@ -33,7 +33,7 @@ function getContent() {
     let imports = '';
     const exports = [];
     importsStr.forEach(filepath => {
-        const filename = StringUtils.firstToUpCase(StringUtils.toHump(_path.basename(filepath)));
+        const filename = StringUtils.firstToUpCase(StringUtils.toHump2(StringUtils.toHump(_path.basename(filepath))));
         exports.push(filename);
         imports += importTemp({ filename, filepath: './' + filepath });
     })
